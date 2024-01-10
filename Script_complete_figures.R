@@ -1,4 +1,4 @@
-setwd("~/Documents/WTSH_peerJ/Thesis_Docs")
+##Uses files WTSH_MORPHO and WTSH_CHEM##
 library(ggplot2)
 MOR <- read.table("WTSH_MORPHO.txt", header=TRUE)
 chem <- read.table("WTSH_CHEM.txt", header=TRUE)
