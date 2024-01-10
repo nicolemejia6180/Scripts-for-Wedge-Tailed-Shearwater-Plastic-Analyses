@@ -1,6 +1,6 @@
-setwd("/home/flavia/Desktop/Nicole-Thesis/Data-R/")
+
 library(ggplot2)
-pdf("metadata-nicol.pdf")
+
 #read files
 MOR <- read.table("WTSH_MORPHO.txt", header=TRUE)
 CHEM <- read.table("WTSH_CHEM.txt", header=TRUE)
