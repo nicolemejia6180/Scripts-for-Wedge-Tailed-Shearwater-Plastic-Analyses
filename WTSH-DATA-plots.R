@@ -1,4 +1,4 @@
-setwd("~/Documents/Thesis_Docs")
+
 library(ggplot2)
 #read files
 MOR <- read.table("WTSH_MORPHO.txt", header=TRUE)
