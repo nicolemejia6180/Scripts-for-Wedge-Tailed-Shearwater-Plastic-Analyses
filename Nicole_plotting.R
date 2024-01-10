@@ -1,8 +1,8 @@
-chem<-read.table("/Users/scottedwards/OneDrive\ -\ Harvard\ University/Students/Nicole/Thesis/WTSH_chem_Sheet1_v2b.txt",sep="\t",header = T)
 
 
-head(chem)
-setwd("~/Documents/Thesis_Docs/WTSH_CHEM.txt")
+
+
+##uses files: "WTSH_chem.tsv"
 
 
 #mean value for different columns, ignoring "NA" cells
