@@ -1,4 +1,4 @@
-##Uses files WTSH_MORPHO and WTSH_CHEM##
+## This script contains code for morphometric and chemical data analyses ##
 library(ggplot2)
 MOR <- read.table("WTSH_MORPHO.txt", header=TRUE)
 chem <- read.table("WTSH_CHEM.txt", header=TRUE)
@@ -60,7 +60,7 @@ print(K_final, vp = viewport(layout.pos.row = 1, layout.pos.col = 3))
 ##lm
 weight <- ggplot(juntosOR, aes(Weight.24, as.numeric(Plastic.y) -1)) + geom_point() + 
   geom_smooth(method = "glm", method.args = list(family = "binomial"), se=F) + 
-  labs(y="Plastic",x="Body weight (g)")
+  labs(y="Presence of Plastic",x="Body weight (g)") 
 weight_final <- weight + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                                panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
@@ -68,11 +68,12 @@ weight_final
 #tco2
 tco2 <- ggplot(juntosOR, aes(TCO2, as.numeric(Plastic.y) -1)) + geom_point() + 
   geom_smooth(method = "glm", method.args = list(family = "binomial"), se=F) + 
-  labs(y="Plastic",x="TCO2 (mmol)")
+  labs(y="Presence of Plastic",x="TCO2 (mmol)")
 tco2_final <- tco2 + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
                    panel.background = element_blank(), axis.line = element_line(colour = "black"))
 tco2_final
 #together
+library(grid)
 grid.newpage()
 pushViewport(viewport(layout = grid.layout(1,2)))
 print(weight_final, vp = viewport(layout.pos.row = 1, layout.pos.col = 1))
@@ -459,7 +460,7 @@ BUN_neg<-(chem$BUNmg.dL[-plasticbirds])
 t.test(BUN_pos,BUN_neg)
 #now create midpoints for where you want the bars and error bars to go
 meanplastBUN<-mean(chem$BUNmg.dL[plasticbirds],na.rm = T) 
-meannoplastBUN<-mean(chem$BUNmg.dL[-plasticbirds],na.rm = T)
+meannoplastBUN<-mean(chem$BUNmg.dL[-plasticbirds],na.rm = T) 
 BUN<-c(meanplastBUN,meannoplastBUN)
 sdplastBUN<-sd(chem$BUNmg.dL[plasticbirds],na.rm = T)
 sdnoplastBUN<-sd(chem$BUNmg.dL[-plasticbirds],na.rm = T)
@@ -472,9 +473,9 @@ barplot(BUN,col = c("dark grey", "white"),ylim=range(0,20),yaxp=c(0, 180, 18),na
 ## Bar Plot for Hct
 #now find the mean and s.d. of Hct for birds in these rows and in rows outside this set:
 mean(chem$Hct.perctPCU[plasticbirds],na.rm = T)
-mean(chem$Hct.perctPC[-plasticbirds],na.rm = T)
-sd(chem$Hct.perctPC[plasticbirds],na.rm = T)
-sd(chem$Hct.perctPC[-plasticbirds],na.rm = T)
+mean(chem$Hct.perctPCU[-plasticbirds],na.rm = T)
+sd(chem$Hct.perctPCU[plasticbirds],na.rm = T)
+sd(chem$Hct.perctPCU[-plasticbirds],na.rm = T)
 #t-test of differences in mean between these groups
 Hct_pos<-(chem$Hct.perctPC[plasticbirds])
 Hct_neg<-(chem$Hct.perctPC[-plasticbirds])
@@ -515,7 +516,7 @@ midHg<-barplot(Hg,col = c("dark grey", "white"), plot = F)
 midHg
 barplot(Hg,col = c("dark grey", "white"),ylim=range(0,15),yaxp=c(0, 180, 18),names.arg = c("+","-"),ylab = "Hemoglobin (g/dL)",las=1) + arrows(x0=midHg, y0=Hg-y.sdHg, x1=midHg, y1=Hg+y.sdHg, code=3, angle=90, length=0.1)
 
-## Bar plot for AnGao mmol/L 
+## Bar plot for AnGap mmol/L 
 #now find the mean and s.d. of Clmmol/L for birds in these rows and in rows outside this set:
 mean(chem$AnGapmmol.L[plasticbirds],na.rm = T)
 mean(chem$AnGapmmol.L[-plasticbirds],na.rm = T)
@@ -565,27 +566,43 @@ help(attach)
 
 
 ## Bar Plot for weight and plastic
-#now find the mean and s.d. of iCammol/L for birds in these rows and in rows outside this set:
-mean(MOR$Weight.24[plasticbirds],na.rm = T)
-mean(MOR$Weight.24[-plasticbirds],na.rm = T)
-sd(MOR$Weight.24[plasticbirds],na.rm = T)
-sd(MOR$Weight.24[-plasticbirds],na.rm = T)
+#now find the mean and s.d. of weight for birds in these rows and in rows outside this set:
+
+## mean(MOR$Weight.24[plasticbirds],na.rm = T)
+plasticbirds2<-which(MOR$Plastic == "+")
+mean(MOR$Weight.24[plasticbirds2])
+mean(MOR$Weight.24[-plasticbirds2])
+#Find the standard deviation
+sd(MOR$Weight.24[plasticbirds2])
+sd(MOR$Weight.24[-plasticbirds2])
 #t-test of differences in mean between these groups
-W_pos<-(MOR$Weight.24[plasticbirds])
-W_neg<-(MOR$Weight.24[-plasticbirds])
+W_pos<-(MOR$Weight.24[plasticbirds2])
+W_neg<-(MOR$Weight.24[-plasticbirds2])
 ##y1 <- c(Na_pos, Na_neg)
-t.test(iCa_pos,iCa_neg)
+t.test(W_pos,W_neg)
 #now create midpoints for where you want the bars and error bars to go
-meanplastIC<-mean(MOR$Weight.24[plasticbirds],na.rm = T)
-meannoplastIC<-mean(MOR$Weight.24[-plasticbirds],na.rm = T)
-W<-c(meanplastIC,meannoplastIC)
-sdplastW<-sd(MOR$Weight.24[plasticbirds],na.rm = T)
-sdnoplastW<-sd(MOR$Weight.24[-plasticbirds],na.rm = T)
+meanplastW<-mean(MOR$Weight.24[plasticbirds2],na.rm = T)
+meannoplastW<-mean(MOR$Weight.24[-plasticbirds2],na.rm = T)
+W<-c(meanplastW,meannoplastW)
+sdplastW<-sd(MOR$Weight.24[plasticbirds2],na.rm = T)
+sdnoplastW<-sd(MOR$Weight.24[-plasticbirds2],na.rm = T)
 y.sdW<-c(sdplastW,sdnoplastW)
 
 midW<-barplot(W,col = c("dark grey", "white"), plot = F)
 midW
 barplot(W,col = c("dark grey", "white"),ylim=range(0,600),yaxp=c(0, 500, 10),names.arg = c("+","-"),ylab = "Body Weight (grams)",las=1) + arrows(x0=midW, y0=W-y.sdW, x1=midW, y1=W+y.sdW, code=3, angle=90, length=0.1)
-### together barplots) ###
+### together barplots ###
 
 par(mfrow = c(4, 3))
+
+
+##Shapiro-Wilk normality test
+shapiro.test(mannwhitweight$weight)
+
+## Mann-Whitney U Test
+#create data frame 
+mannwhitweight <- data.frame(weight = c(juntosOR$Weight.24), category = c(juntosOR$wfact), plastic = c(juntosOR$Plastic.y))
+head(mannwhitweight)
+#run Mann-Whitney U test
+test_result <- wilcox.test(weight ~ plastic, data = mannwhitweight)
+print(test_result)
