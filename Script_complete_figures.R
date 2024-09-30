@@ -24,9 +24,10 @@ pp <-p + geom_bar(aes(y=BUNmg.dL,x=Plastic.y,fill=Plastic.y),stat="identity") +
 pp <-p + geom_bar(aes(y=BUNmg.dL,x=Bird_ID, fill=Plastic.y),stat="identity") + facet_wrap(~Plastic.y, ncol=1)
 ggsave(plot=pp,"WTSH-plot-plstic-CHEM.eps",device=cairo_ps, width=13, height=5, limitsize = FALSE)
 ggsave(plot=pp,"WTSH-plot-plstic-CHEM.pdf",device=cairo_ps, width=13, height=5, limitsize = FALSE)
-
-
-##final
+#Linear Model
+fit2 <- glm(Weight.24 ~ BUNmg.dL+ Creamg.dL+ Hct.perctPCU+Hb.g.dL +AnGapmmol.L+Nammol.L+ K.mmol.L+ Clmmol.L+ iCammol.L+ TCO2+ Glumg.dL , data=juntosOR, family="poisson")
+summary(fit2)
+##BUN final
 ggplot(juntosOR, aes(x=BUNmg.dL, y=Weight.24)) + geom_point()+geom_smooth(method=lm) + 
   labs(y= "Body weight (g)",x="BUN (mg)") + theme_bw() + theme(axis.line = element_line(colour = "black"))
 BUN3 <- ggplot(juntosOR, aes(x=BUNmg.dL, y=Weight.24)) + geom_point()+geom_smooth(method=lm) + 
@@ -297,6 +298,12 @@ print(gs, vp = viewport(layout.pos.row = 2, layout.pos.col = 1))
 print(gs2, vp = viewport(layout.pos.row = 2, layout.pos.col = 2))
 
 ############## bar plots######
+#t-test weight male and females 
+females <-which(MOR$Sex == "F")
+males <- which(MOR$Sex == "M")
+weight_f<-(MOR$Weight.24[females])
+weight_m<-(MOR$Weight.24[males])
+t.test(weight_f,weight_m)
 #mean value for different columns, ignoring "NA" cells
 mean(chem$iCammol.L,na.rm = T)
 #how many males and females in data set?
